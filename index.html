@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitallis</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="vt">
+            <img src="imagens/logo2.svg" class="logonav" alt="">
+            <span class="brand-name">Vitallis</span>
+        </a>
 
+        <nav>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            home
+                            </span>
+                        </div>
+                        <span class="label">Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            health_cross
+                            </span>
+                        </div>
+                        <span class="label">Exercícios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="cronograma.html" class="nav-link">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            calendar_month
+                            </span>
+                        </div>
+                        <span class="label">Cronograma</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown-item" id="perfilItem">
+                    <a href="#" class="nav-lin" id="perfilToggle">
+                        <span class="material-symbols-outlined">
+                            account_circle
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" id="perfilDropdown">
+                        <li>
+                            <a href="perfil.html" class="dropdown-link">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Ver perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="login.html" class="dropdown-link" id="logoutBtn">
+                                <span class="material-symbols-outlined">logout</span>
+                                <span>Sair</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>
