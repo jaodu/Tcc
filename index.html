@@ -4,9 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vitallis</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <script src="script.js" defer></script>
+    <script src="js/script.js" defer></script>
+
+    <style>
+body{
+    display: flex;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--fundo);
+}
+</style>
 </head>
 <body>
     <header class="header">
@@ -31,7 +40,7 @@
                     <a href="#" class="nav-link">
                         <div class="icon">
                             <span class="material-symbols-outlined">
-                            health_cross
+                            exercise
                             </span>
                         </div>
                         <span class="label">Exercícios</span>
@@ -49,8 +58,8 @@
                 </li>
 
                 <li class="nav-item dropdown-item" id="perfilItem">
-                    /*aqui*/
-                    <a href="#" class="nav-lin" id="perfilToggle">
+                
+                    <a href="#" class="nav-link" id="perfilToggle">
                         <span class="material-symbols-outlined">
                             account_circle
                         </span>
@@ -73,5 +82,22 @@
             </ul>
         </nav>
     </header>
+
+    <section id="hero" class="hero-section">
+        <img src="imagens/fundobranco.svg" class="fundo-hero" alt="background image">
+        <div class="hero-content">
+            <h1>A reabilitação não precisa esperar, <br>
+                volte a viver sem dor.</h1>
+            <p>O Vitallis nasceu para tornar a reabilitação mais acessível, você inicia sua recuperação 
+                quando e onde quiser. A plataforma oferece exercícios personalizados, acompanhamento 
+                da evolução e orientações para que você possa voltar às suas atividades com mais 
+                segurança, autonomia e qualidade de vida, sem depender da disponibilidade de terceiros.</p>
+                <button class="btn-hero" id="btn-hero">Comece agora</button>
+        </div> 
+            </section>
+
+    
+    
 </body>
+
 </html>
