@@ -1,0 +1,136 @@
+<?php
+require_once 'conexao.php';
+
+// Proteção da página: se o usuário não estiver logado, manda de volta para o login.php
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitallis</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+    <div class="body-header">
+    <header class="header">
+        <a href="#" class="vt">
+            <img src="imagens/logo2.svg" class="logonav" alt="">
+            <span class="brand-name">Vitallis</span>
+        </a>
+
+        <nav>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="inicio.php" class="nav-link">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            home
+                            </span>
+                        </div>
+                        <span class="label">Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            exercise
+                            </span>
+                        </div>
+                        <span class="label">Exercícios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="cronograma.html" class="nav-link">
+                        <div class="icon">
+                            <span class="material-symbols-outlined">
+                            calendar_month
+                            </span>
+                        </div>
+                        <span class="label">Cronograma</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown-item" id="perfilItem">
+                
+                    <a href="#" class="nav-link" id="perfilToggle">
+                        <span class="material-symbols-outlined">
+                            account_circle
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu" id="perfilDropdown">
+                        <li>
+                            <a href="perfil.html" class="dropdown-link">
+                                <span class="material-symbols-outlined">person</span>
+                                <span>Ver perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="logout.php" class="dropdown-link" id="logoutBtn">
+                                <span class="material-symbols-outlined">logout</span>
+                                <span>Sair</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <section id="card-inicio">
+        <div class="unidades">
+    <div class="unidade">
+      <br>
+      <h4>
+        <strong>Araraquara - Unidade 1 </strong>
+      </h4>
+      <br>
+      <img src="img/Design sem nome (6).png" width="90%">
+      <br>
+      <br>
+      <h5> R. Maurício Galli, 555 - Vila Sedenho, Araraquara - SP</h5>
+  </div>
+  <div class="unidade">
+    <br>
+    <h4>
+      <strong>Araraquara - Unidade 2 </strong>
+    </h4>
+    <br>
+    <img src="img/Design sem nome (7).png" width="90%">
+    <br>
+    <br>
+    <h5> Av. Padre Francisco Salles Colturato, 924, Araraquara - SP</h5>
+</div>
+<div class="unidade">
+  <br>
+  <h4>
+    <strong>Ribeirão Preto - Unidade 1 </strong>
+  </h4>
+  <br>
+  <img src="img/Design sem nome (8).png" width="90%">
+  <br>
+  <br>
+  <h5> Av. Maria de Jesus Condeixa, 600 - Jardim Palma Travassos, Ribeirão Preto - SP</h5>
+</div>
+<div class="unidade">
+  <br>
+  <h4>
+    <strong>Ribeirão Preto - Unidade 1 </strong>
+  </h4>
+  <br>
+  <img src="img/Design sem nome (8).png" width="90%">
+  <br>
+  <br>
+  <h5> Av. Maria de Jesus Condeixa, 600 - Jardim Palma Travassos, Ribeirão Preto - SP</h5>
+</div>
+  </div>
+    </section>
+</div>
+</body>
+</html>
