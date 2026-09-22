@@ -305,14 +305,15 @@ header {
 }
 
 .logonav {
-    width: 40px;
-    height: 0px;
+    width: 110px;
+    height: 110px;
 }
 
 .logo {
     display: flex;
     align-items: center;
 }
+
 
 .logo img {
     width: 45px;
@@ -978,5 +979,295 @@ footer.site-footer{
     }
     .btn-editar-perfil{
         margin-left: auto;
+    }
+}
+
+/*Pag Exercicio*/
+/* ===================================================
+   PÁGINA DE EXERCÍCIOS & BARRA DE BUSCA
+   =================================================== */
+.exercicios-main {
+    max-width: 1200px;
+    margin: 0 auto 2rem auto;
+    padding: 120px 1.5rem 0 1.5rem; 
+}
+.titulo-pagina {
+    color: #178f8d;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitulo-pagina {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+/* BARRA DE PESQUISA */
+.busca-container {
+    position: relative;
+    max-width: 500px;
+    margin: 0 0 2.5rem 0;
+}
+
+.input-busca-wrap {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.input-busca-wrap:focus-within {
+    border-color: #178f8d;
+}
+
+.icon-busca {
+    color: #888;
+    margin-right: 0.5rem;
+}
+
+.input-busca-wrap input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    color: #333;
+    background: transparent;
+}
+
+/* SUGESTÕES DA BUSCA (DROPDOWN) */
+.lista-sugestoes {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+}
+
+.lista-sugestoes li {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lista-sugestoes li:hover {
+    background: #f4fbfb;
+    color: #178f8d;
+    font-weight: 600;
+}
+
+/* GRID DE CARDS */
+.exercicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.card-exercicio {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.3s ease;
+}
+
+.card-exercicio:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-exercicio-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.icon-exercicio {
+    color: #178f8d;
+    font-size: 2rem;
+}
+
+.card-exercicio-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #222;
+}
+
+.card-exercicio-descricao {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+}
+
+.card-exercicio-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #178f8d;
+    font-size: 0.9rem;
+}
+
+/* EFEITO PISCA/DESTAQUE AO ROLAR ATÉ O EXERCÍCIO */
+.card-exercicio.destaque {
+    outline: 3px solid #178f8d;
+    transform: scale(1.03);
+}
+
+
+/* ===================== PÁGINA DE EXERCÍCIO (DETALHE) ===================== */
+.exercicio-main{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 110px 24px 60px;
+    width: 100%;
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+}
+
+.exercicio-voltar{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #178f8d;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.exercicio-voltar .material-symbols-outlined{
+    color: #178f8d;
+    font-size: 20px;
+}
+
+.exercicio-voltar:hover{
+    text-decoration: underline;
+}
+
+.exercicio-titulo{
+    font-size: 1.6rem;
+    color: #233;
+    margin-bottom: 22px;
+}
+
+.exercicio-titulo span{
+    color: #178f8d;
+}
+
+.exercicio-card{
+    background: #ffffff;
+    border-radius: 1.5rem;
+    padding: 26px 28px;
+    box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.25);
+    margin-bottom: 20px;
+}
+
+.exercicio-card-soft{
+    background: #eef6f6;
+    box-shadow: none;
+}
+
+.exercicio-card h3{
+    font-size: 1rem;
+    color: #178f8d;
+    margin-bottom: 12px;
+}
+
+.exercicio-card p{
+    font-size: 0.92rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+.como-fazer-wrap{
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.como-fazer-texto h4{
+    font-size: 0.9rem;
+    color: #233;
+    margin: 14px 0 6px;
+}
+
+.como-fazer-texto h4:first-child{
+    margin-top: 0;
+}
+
+.como-fazer-texto ol{
+    margin: 0 0 4px 20px;
+    color: #444;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.como-fazer-imagens{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.como-fazer-imagens img{
+    width: 100%;
+    border-radius: 1rem;
+    background: #f0f0f0;
+    object-fit: cover;
+}
+
+.como-fazer-imagens .sem-imagem{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 160px;
+    border-radius: 1rem;
+    background: #f0f0f0;
+    color: #999;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 12px;
+}
+
+.como-fazer-imagens .sem-imagem .material-symbols-outlined{
+    color: #bbb;
+    font-size: 28px;
+}
+
+.exercicio-lista{
+    margin: 0;
+    padding-left: 20px;
+    color: #444;
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+@media (max-width: 720px){
+    .como-fazer-wrap{
+        grid-template-columns: 1fr;
     }
 }
