@@ -29,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: inicio.php"); 
                     exit;
                 } else {
-                    $mensagem_erro = "Senha incorreta!";
+                    $mensagem_erro = "E-mail ou Senha incorreto!";
                 }
             } else {
-                $mensagem_erro = "E-mail não encontrado!";
+                $mensagem_erro = "E-mail ou Senha incorreto!";
             }
         } else {
             $mensagem_erro = "Preencha todos os campos do login!";
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div id="loginContainer" class="loginContainer">
                 <form method="post">
                     <input type="hidden" name="acao" value="login">
-                    <img src="imagens/LOGO.8.svg" class="logo" alt="logo">
+                    <img src="imagens/logooficialbb.svg" class="logo" alt="logo">
                     <h1 class="entrar">Entrar</h1>
                     <hr>
                     <div class="input-group">
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div id="signContainer" class="signContainer">
                 <form method="post">
                     <input type="hidden" name="acao" value="cadastro">
-                    <img src="imagens/LOGO.8.svg" class="logo" alt="logo">
+                    <img src="imagens/logooficialbb.svg" class="logo" alt="logo">
                     <h1 class="cadastro">Cadastro</h1>
                     <hr>
                     <div class="input-group">
