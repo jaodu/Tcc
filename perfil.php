@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $peso   = (float) ($_POST['peso'] ?? 0);
     $dores  = array_filter(array_map('intval', explode(',', $_POST['dores'] ?? '')));
 
-    if ($nome === '' || $email === '') {
+    if ($nome === '') {
         $mensagem_erro = "Nome e e-mail são obrigatórios.";
     } else {
         $dataNascimento = (date('Y') - $idade) . '-01-01';
