@@ -15,14 +15,14 @@ if (!isset($_SESSION['usuario_id'])) {
     <title>Vitallis</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/script.js" defer></script>
 </head>
 <body>
     <div class="body-header">
     <header class="header">
         <a href="#" class="vt">
-            <img src="imagens/logo2.svg" class="logonav" alt="">
-            <span class="brand-name">Vitallis</span>
+            <img src="imagens/logoobranca.svg" class="logonav" alt="">
         </a>
 
         <nav>
@@ -38,7 +38,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="exercicio.php" class="nav-link">
                         <div class="icon">
                             <span class="material-symbols-outlined">
                             exercise
@@ -67,7 +67,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </a>
                     <ul class="dropdown-menu" id="perfilDropdown">
                         <li>
-                            <a href="perfil.html" class="dropdown-link">
+                            <a href="perfil.php" class="dropdown-link">
                                 <span class="material-symbols-outlined">person</span>
                                 <span>Ver perfil</span>
                             </a>
@@ -86,51 +86,75 @@ if (!isset($_SESSION['usuario_id'])) {
     <section id="card-inicio">
         <div class="unidades">
     <div class="unidade">
-      <br>
-      <h4>
-        <strong>Araraquara - Unidade 1 </strong>
-      </h4>
-      <br>
-      <img src="img/Design sem nome (6).png" width="90%">
-      <br>
-      <br>
-      <h5> R. Maurício Galli, 555 - Vila Sedenho, Araraquara - SP</h5>
+     
+
+
   </div>
   <div class="unidade">
-    <br>
-    <h4>
-      <strong>Araraquara - Unidade 2 </strong>
-    </h4>
-    <br>
-    <img src="img/Design sem nome (7).png" width="90%">
-    <br>
-    <br>
-    <h5> Av. Padre Francisco Salles Colturato, 924, Araraquara - SP</h5>
+   
+
+
 </div>
 <div class="unidade">
-  <br>
-  <h4>
-    <strong>Ribeirão Preto - Unidade 1 </strong>
-  </h4>
-  <br>
-  <img src="img/Design sem nome (8).png" width="90%">
-  <br>
-  <br>
-  <h5> Av. Maria de Jesus Condeixa, 600 - Jardim Palma Travassos, Ribeirão Preto - SP</h5>
+ 
+
+
 </div>
-<div class="unidade">
-  <br>
-  <h4>
-    <strong>Ribeirão Preto - Unidade 1 </strong>
-  </h4>
-  <br>
-  <img src="img/Design sem nome (8).png" width="90%">
-  <br>
-  <br>
-  <h5> Av. Maria de Jesus Condeixa, 600 - Jardim Palma Travassos, Ribeirão Preto - SP</h5>
-</div>
-  </div>
+
     </section>
 </div>
+
+    <footer class="site-footer">
+        <div class="footer-wrap">
+            <div class="footer-top">
+
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <span class="dot"></span>
+                        <span>Vitallis</span>
+                    </div>
+                    <p class="lede">
+                        Plataforma digital de apoio à reabilitação e fisioterapia,
+                        feita para quem não tem tempo ou condições de manter
+                        acompanhamento profissional frequente.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.php"><span class="material-symbols-outlined">home</span>Início</a></li>
+                        <li><a href="exercicio.php"><span class="material-symbols-outlined">health_and_safety</span>Exercícios</a></li>
+                        <li><a href="cronograma.php"><span class="material-symbols-outlined">calendar_month</span>Cronograma</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Institucional</h4>
+                    <ul class="footer-links">
+                        <li><a href="sobre.php"><span class="material-symbols-outlined">info</span>Sobre nós</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contato</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contato@vitallis.com" ><span class="material-symbols-outlined">mail</span>contato@vitallis.com</a></li>
+                        <li><a href="tel:+5516999999999"><span class="material-symbols-outlined">call</span>(16) 99999-9999</a></li>
+                    </ul>
+                    <div class="social-row">
+                        <a href="#" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 Vitallis — Projeto de Trabalho de Conclusão de Curso</span>
+                <span>Desenvolvido por Alice, João e Yumi</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
