@@ -14,8 +14,7 @@
 <div class="body-header">
     <header class="header">
         <a href="index.php" class="vt">
-            <img src="imagens/LOGO.8.svg" class="logonav" alt="Logo Vitallis">
-            <span class="brand-name">Vitallis</span>
+            <img src="imagens/logoobranca.svg" class="logonav" alt="Logo Vitallis">
         </a>
 
         <nav>
@@ -82,8 +81,7 @@
 
                 <div class="footer-col">
                     <div class="footer-brand">
-                        <span class="dot"></span>
-                        <span>Vitallis</span>
+                    <img src="imagens/logoobranca.svg" class="logonav" alt="Logo Vitallis">
                     </div>
                     <p class="lede">
                         Plataforma digital de apoio à reabilitação e fisioterapia,
@@ -112,13 +110,12 @@
                 <div class="footer-col">
                     <h4>Contato</h4>
                     <ul class="footer-links">
-                        <li><a href="mailto:contato@vitallis.com"><span class="material-symbols-outlined">mail</span>contato@vitallis.com</a></li>
+                        <li><a href="mailto:contato@vitallis.com" ><span class="material-symbols-outlined">mail</span>contato@vitallis.com</a></li>
                         <li><a href="tel:+5516999999999"><span class="material-symbols-outlined">call</span>(16) 99999-9999</a></li>
                     </ul>
                     <div class="social-row">
-                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
 
