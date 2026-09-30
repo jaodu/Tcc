@@ -186,3 +186,77 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 }); 
+// ===================================================
+// PÁGINA DE CRONOGRAMA — accordion dos dias + concluir exercício
+// ===================================================
+document.addEventListener('DOMContentLoaded', function () {
+    // Abre/fecha cada dia ao clicar no cabeçalho
+    document.querySelectorAll('.cronograma-dia-header').forEach(header => {
+        header.addEventListener('click', () => {
+            header.closest('.cronograma-dia').classList.toggle('aberto');
+        });
+    });
+
+    // Marca/desmarca exercício como concluído hoje (salva no banco via AJAX)
+    document.querySelectorAll('.btn-concluir').forEach(botao => {
+        botao.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const item = botao.closest('.cronograma-exercicio-item');
+            const idExercicio = item.dataset.idExercicio;
+            const vaiConcluir = !botao.classList.contains('concluido');
+
+            botao.disabled = true;
+
+            fetch('marcar_exercicio.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id_exercicio=${encodeURIComponent(idExercicio)}&concluido=${vaiConcluir ? 1 : 0}`
+            })
+                .then(resposta => resposta.json())
+                .then(dados => {
+                    if (dados.sucesso) {
+                        botao.classList.toggle('concluido', vaiConcluir);
+                    } else {
+                        console.error('Erro ao salvar:', dados.mensagem);
+                    }
+                })
+                .catch(erro => console.error('Erro de conexão:', erro))
+                .finally(() => { botao.disabled = false; });
+        });
+    });
+});
+
+// ===================================================
+// PÁGINA INICIAL — check-in de bem-estar (tabela evolucao)
+// ===================================================
+document.addEventListener('DOMContentLoaded', function () {
+    const botoesBemEstar = document.querySelectorAll('.bemestar-btn');
+    const resumo = document.getElementById('bemEstarResumo');
+
+    botoesBemEstar.forEach(botao => {
+        botao.addEventListener('click', () => {
+            const chave = botao.dataset.chave;
+            botao.disabled = true;
+
+            fetch('registrar_evolucao.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `chave=${encodeURIComponent(chave)}`
+            })
+                .then(resposta => resposta.json())
+                .then(dados => {
+                    if (dados.sucesso) {
+                        botoesBemEstar.forEach(b => b.classList.remove('selecionado'));
+                        botao.classList.add('selecionado');
+                        if (resumo) {
+                            resumo.textContent = `Check-in de hoje: ${dados.bem_estar}`;
+                        }
+                    } else {
+                        console.error('Erro ao salvar check-in:', dados.mensagem);
+                    }
+                })
+                .catch(erro => console.error('Erro de conexão:', erro))
+                .finally(() => { botao.disabled = false; });
+        });
+    });
+});
