@@ -1,7 +1,6 @@
 <?php
 require_once 'conexao.php';
 
-// Proteção da página: se o usuário não estiver logado, manda de volta para o login.php
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
@@ -14,21 +13,16 @@ if ($idExercicio <= 0) {
     exit;
 }
 
-$stmt = $conexao->prepare("SELECT id, titulo, repeticao, cuidados, como_fazer, descricao FROM exercicio WHERE id = ?");
+$stmt = $conexao->prepare("SELECT id, titulo, repeticao, cuidados, como_fazer, descricao, imagem FROM exercicio WHERE id = ?");
 $stmt->bind_param("i", $idExercicio);
 $stmt->execute();
 $exercicio = $stmt->get_result()->fetch_assoc();
 
-// Se o id não existir no banco, volta pra lista em vez de mostrar página quebrada
 if (!$exercicio) {
     header("Location: exercicio.php");
     exit;
 }
 
-/**
- * Transforma um texto com linhas numeradas ("1. texto\n2. texto") em um array simples
- * de itens (sem a numeração). Usado nos campos "repeticao" e "cuidados".
- */
 function parseListaSimples(string $texto): array
 {
     $linhas = preg_split('/\r\n|\r|\n/', trim($texto));
@@ -42,12 +36,6 @@ function parseListaSimples(string $texto): array
     return $itens;
 }
 
-/**
- * Transforma o texto de "como_fazer" em blocos, cada um com um título opcional
- * (ex: "Posição inicial", "Movimento 'Gato'") e uma lista numerada de passos.
- * Segue o padrão já usado no banco: linhas sem número = título do bloco,
- * linhas "1. texto" = passo dentro do bloco atual.
- */
 function parseComoFazer(string $texto): array
 {
     $linhas = preg_split('/\r\n|\r|\n/', trim($texto));
@@ -76,40 +64,26 @@ function parseComoFazer(string $texto): array
     return $blocos;
 }
 
-/**
- * Procura imagens do exercício em imagens/exercicios/ seguindo o padrão {id}_{n}.{ext}
- * (ex: imagens/exercicios/5_1.png, imagens/exercicios/5_2.png).
- * Assim que vocês criarem a coluna/tabela de imagens no banco, é só trocar o corpo
- * desta função por uma leitura direta dos dados do exercício — o resto da página
- * continua funcionando igual, porque só espera receber um array de caminhos.
- */
-function buscarImagensExercicio(int $id): array
+function buscarImagensExercicio(array $exercicio): array
 {
-    $extensoes = ['png', 'jpg', 'jpeg', 'webp'];
-    $imagens = [];
-    for ($i = 1; $i <= 3; $i++) {
-        foreach ($extensoes as $ext) {
-            $caminho = "imagens/exercicios/{$id}_{$i}.{$ext}";
-            if (file_exists($caminho)) {
-                $imagens[] = $caminho;
-                break;
-            }
-        }
+    if (!empty($exercicio['imagem'])) {
+        $caminho = "imagens/exercicios/" . $exercicio['imagem'];
+        return [$caminho]; 
     }
-    return $imagens;
+    return [];
 }
 
 $blocosComoFazer  = parseComoFazer($exercicio['como_fazer']);
 $listaRepeticao   = parseListaSimples($exercicio['repeticao']);
 $listaCuidados    = parseListaSimples($exercicio['cuidados']);
-$imagensExercicio = buscarImagensExercicio($exercicio['id']);
+$imagensExercicio = buscarImagensExercicio($exercicio);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitallis — <?= htmlspecialchars($exercicio['titulo']) ?></title>
+    <title>Vitallis</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -118,7 +92,7 @@ $imagensExercicio = buscarImagensExercicio($exercicio['id']);
 <body>
     <div class="body-header">
     <header class="header">
-        <a href="#" class="vt">
+        <a href="inicio.php" class="vt">
             <img src="imagens/logoobranca.svg" class="logonav" alt="">
         </a>
 
@@ -156,6 +130,7 @@ $imagensExercicio = buscarImagensExercicio($exercicio['id']);
                 </li>
 
                 <li class="nav-item dropdown-item" id="perfilItem">
+                
                     <a href="#" class="nav-link" id="perfilToggle">
                         <span class="material-symbols-outlined">
                             account_circle
@@ -246,15 +221,11 @@ $imagensExercicio = buscarImagensExercicio($exercicio['id']);
     </main>
     </div>
 
-    <footer class="site-footer">
+   <footer class="site-footer">
         <div class="footer-wrap">
             <div class="footer-top">
 
                 <div class="footer-col">
-                    <div class="footer-brand">
-                        <span class="dot"></span>
-                        <span>Vitallis</span>
-                    </div>
                     <p class="lede">
                         Plataforma digital de apoio à reabilitação e fisioterapia,
                         feita para quem não tem tempo ou condições de manter
@@ -265,28 +236,21 @@ $imagensExercicio = buscarImagensExercicio($exercicio['id']);
                 <div class="footer-col">
                     <h4>Navegação</h4>
                     <ul class="footer-links">
-                        <li><a href="index.php"><span class="material-symbols-outlined">home</span>Início</a></li>
+                        <li><a href="inicio.php"><span class="material-symbols-outlined">home</span>Início</a></li>
                         <li><a href="exercicio.php"><span class="material-symbols-outlined">health_and_safety</span>Exercícios</a></li>
                         <li><a href="cronograma.php"><span class="material-symbols-outlined">calendar_month</span>Cronograma</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
-                    <h4>Institucional</h4>
-                    <ul class="footer-links">
-                        <li><a href="sobre.php"><span class="material-symbols-outlined">info</span>Sobre nós</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
                     <h4>Contato</h4>
                     <ul class="footer-links">
-                        <li><a href="mailto:contato@vitallis.com"><span class="material-symbols-outlined">mail</span>contato@vitallis.com</a></li>
-                        <li><a href="tel:+5516999999999"><span class="material-symbols-outlined">call</span>(16) 99999-9999</a></li>
+                        <li><a href="mailto:yumisperes@gmail.com" ><span class="material-symbols-outlined">mail</span>yumisperes@gmail.com</a></li>
+                        <li><a href="tel:+5516997423129"><span class="material-symbols-outlined">call</span>(16) 99742-3120</a></li>
                     </ul>
                     <div class="social-row">
-                        <a href="#" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/aliceespinelli_/" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/5516997016732" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
 
