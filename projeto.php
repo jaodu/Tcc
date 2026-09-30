@@ -1,7 +1,7 @@
+<!-- base para as paginas no geral -->
 <?php
 require_once 'conexao.php';
 
-// Proteção da página: se o usuário não estiver logado, manda de volta para o login.php
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
@@ -21,7 +21,7 @@ if (!isset($_SESSION['usuario_id'])) {
 <body>
     <div class="body-header">
     <header class="header">
-        <a href="#" class="vt">
+        <a href="inicio.php" class="vt">
             <img src="imagens/logoobranca.svg" class="logonav" alt="">
         </a>
 
@@ -38,7 +38,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="exercio.php" class="nav-link">
+                    <a href="exercicio.php" class="nav-link">
                         <div class="icon">
                             <span class="material-symbols-outlined">
                             exercise
@@ -85,15 +85,11 @@ if (!isset($_SESSION['usuario_id'])) {
     </header>
 
 
-    <footer class="site-footer">
+   <footer class="site-footer">
         <div class="footer-wrap">
             <div class="footer-top">
 
                 <div class="footer-col">
-                    <div class="footer-brand">
-                        <span class="dot"></span>
-                        <span>Vitallis</span>
-                    </div>
                     <p class="lede">
                         Plataforma digital de apoio à reabilitação e fisioterapia,
                         feita para quem não tem tempo ou condições de manter
@@ -104,28 +100,21 @@ if (!isset($_SESSION['usuario_id'])) {
                 <div class="footer-col">
                     <h4>Navegação</h4>
                     <ul class="footer-links">
-                        <li><a href="index.php"><span class="material-symbols-outlined">home</span>Início</a></li>
+                        <li><a href="inicio.php"><span class="material-symbols-outlined">home</span>Início</a></li>
                         <li><a href="exercicio.php"><span class="material-symbols-outlined">health_and_safety</span>Exercícios</a></li>
                         <li><a href="cronograma.php"><span class="material-symbols-outlined">calendar_month</span>Cronograma</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
-                    <h4>Institucional</h4>
-                    <ul class="footer-links">
-                        <li><a href="sobre.php"><span class="material-symbols-outlined">info</span>Sobre nós</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-col">
                     <h4>Contato</h4>
                     <ul class="footer-links">
-                        <li><a href="mailto:contato@vitallis.com" ><span class="material-symbols-outlined">mail</span>contato@vitallis.com</a></li>
-                        <li><a href="tel:+5516999999999"><span class="material-symbols-outlined">call</span>(16) 99999-9999</a></li>
+                        <li><a href="mailto:yumisperes@gmail.com" ><span class="material-symbols-outlined">mail</span>yumisperes@gmail.com</a></li>
+                        <li><a href="tel:+5516997423129"><span class="material-symbols-outlined">call</span>(16) 99742-3120</a></li>
                     </ul>
                     <div class="social-row">
-                        <a href="#" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/aliceespinelli_/" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/5516997016732" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
 
