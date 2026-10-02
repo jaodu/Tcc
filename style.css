@@ -366,7 +366,7 @@ header {
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
- 
+
 @media (max-width: 760px) {
     .inicio-atalhos { grid-template-columns: 1fr; }
 }
@@ -412,6 +412,54 @@ header {
     gap: 1.5rem;
     align-items: start;
 }
+
+.bemestar-opcoes {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    }
+ 
+    .bemestar-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    background: #f7fbfb;
+    border: 2px solid transparent;
+    border-radius: 0.9rem;
+    padding: 0.6rem 0.3rem;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    }
+ 
+    .bemestar-btn:hover {
+    transform: translateY(-2px);
+    background: #eef6f6;
+    }
+ 
+    .bemestar-btn.selecionado {
+    background: #e3f5f4;
+    border-color: #178f8d;
+    }
+ 
+    .bemestar-emoji {
+    font-size: 1.5rem;
+    }
+ 
+    .bemestar-label {
+    font-size: 0.72rem;
+    color: #555;
+    font-weight: 600;
+    }
+ 
+    .inicio-bemestar-resumo {
+    font-size: 0.82rem;
+    color: #178f8d;
+    font-weight: 600;
+    margin-top: 0.9rem;
+    }
+
  
 @media screen and (max-width: 768px) {
     .inicio-grid { grid-template-columns: 1fr; }
@@ -1414,7 +1462,7 @@ footer.site-footer{
     max-width: 420px;
     color: #555;
 }
- 
+
 .cronograma-board {
     max-width: 680px;
     margin: 0 auto;
@@ -1491,10 +1539,18 @@ footer.site-footer{
     border-radius: 0.6rem;
     padding: 0.5rem 0.6rem;
     margin-bottom: 0.5rem;
+    max-height: 60px;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.25s ease, max-height 0.25s ease 0.05s, margin 0.25s ease 0.05s, padding 0.25s ease 0.05s;
 }
  
-.cronograma-exercicio-item.oculto {
-    display: none;
+.cronograma-exercicio-item.concluido-sumir {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
  
 .icon-exercicio-mini {
@@ -1556,11 +1612,6 @@ footer.site-footer{
  
 .btn-concluir:hover .material-symbols-outlined {
     color: #178f8d;
-}
- 
-.btn-concluir.concluido .material-symbols-outlined {
-    color: #178f8d;
-    font-variation-settings: 'FILL' 1;
 }
  
 /* inicioo */
@@ -1693,4 +1744,33 @@ footer.site-footer{
     margin-top: 0.9rem;
     }
 
-   
+   .progresso-hoje {
+    margin-bottom: 1rem;
+}
+
+.barra-progresso-wrap {
+    width: 100%;
+    height: 10px;
+    background: #e9f2f2;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.barra-progresso-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #178f8d, #4db9b8);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+}
+
+.progresso-texto {
+    font-size: 0.8rem;
+    color: #178f8d;
+    font-weight: 600;
+    margin-top: 0.4rem;
+}
+
+.exercicios-lista-itens {
+    display: flex;
+    flex-direction: column;
+}
