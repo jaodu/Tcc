@@ -8,6 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="js/script.js" defer></script>
+
+<style>
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #ebebeb;
+}
+</style>
+
 </head>
 <body>
 
@@ -71,5 +81,46 @@
         </div> 
     </section>
     
+       <footer class="site-footer">
+        <div class="footer-wrap">
+            <div class="footer-top">
+
+                <div class="footer-col">
+                    <p class="lede">
+                        Plataforma digital de apoio à reabilitação e fisioterapia,
+                        feita para quem não tem tempo ou condições de manter
+                        acompanhamento profissional frequente.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul class="footer-links">
+                        <li><a href="inicio.php"><span class="material-symbols-outlined">home</span>Início</a></li>
+                        <li><a href="exercicio.php"><span class="material-symbols-outlined">health_and_safety</span>Exercícios</a></li>
+                        <li><a href="cronograma.php"><span class="material-symbols-outlined">calendar_month</span>Cronograma</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contato</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:yumisperes@gmail.com" ><span class="material-symbols-outlined">mail</span>yumisperes@gmail.com</a></li>
+                        <li><a href="tel:+5516997423129"><span class="material-symbols-outlined">call</span>(16) 99742-3120</a></li>
+                    </ul>
+                    <div class="social-row">
+                        <a href="https://www.instagram.com/aliceespinelli_/" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://wa.me/5516997016732" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 Vitallis — Projeto de Trabalho de Conclusão de Curso</span>
+                <span>Desenvolvido por Alice, João e Yumi</span>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
