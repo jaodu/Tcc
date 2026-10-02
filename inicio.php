@@ -1,7 +1,6 @@
 <?php
 require_once 'conexao.php';
 
-// Proteção da página: se o usuário não estiver logado, manda de volta para o login.php
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
@@ -10,13 +9,11 @@ if (!isset($_SESSION['usuario_id'])) {
 $idUsuario = (int) $_SESSION['usuario_id'];
 $hoje = date('Y-m-d');
 
-// Nosso banco usa 1 = Domingo ... 7 = Sábado (mesmo padrão do DAYOFWEEK do MySQL)
 $diasSemanaCompletos = [1 => 'Domingo', 2 => 'Segunda-feira', 3 => 'Terça-feira', 4 => 'Quarta-feira', 5 => 'Quinta-feira', 6 => 'Sexta-feira', 7 => 'Sábado'];
-$letrasSemana        = [0 => 'D', 1 => 'S', 2 => 'T', 3 => 'Q', 4 => 'Q', 5 => 'S', 6 => 'S']; // indexado por date('w')
-$diaHojeBanco        = ((int) date('w')) + 1; // date('w') = 0 (dom) .. 6 (sáb)
+$letrasSemana        = [0 => 'D', 1 => 'S', 2 => 'T', 3 => 'Q', 4 => 'Q', 5 => 'S', 6 => 'S']; 
+$diaHojeBanco        = ((int) date('w')) + 1; 
 $dataFormatada        = $diasSemanaCompletos[$diaHojeBanco] . ', ' . date('d/m/Y');
 
-// Nome do usuário: tenta pegar do perfil, senão cai pro início do e-mail
 $stmt = $conexao->prepare("SELECT nome FROM perfil WHERE id_usuario = ?");
 $stmt->bind_param("i", $idUsuario);
 $stmt->execute();
@@ -31,7 +28,6 @@ if (!$nomeExibicao) {
     $nomeExibicao = $usuario ? explode('@', $usuario['email'])[0] : 'visitante';
 }
 
-// Regiões do corpo com dor ativa marcadas no perfil
 $stmt = $conexao->prepare("
     SELECT rc.id
     FROM registro_dor rd
@@ -42,9 +38,6 @@ $stmt->bind_param("i", $idUsuario);
 $stmt->execute();
 $idsRegioes = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'id');
 
-// Exercícios de HOJE, juntando todas as regiões com dor ativa.
-// Se for só 1 região, mostra todos os exercícios de hoje daquela região;
-// se for mais de uma, mostra só 1 exercício de cada região (senão fica gigante).
 $exerciciosHoje = [];
 if (!empty($idsRegioes)) {
     $limitarUmPorRegiao = count($idsRegioes) > 1;
@@ -77,9 +70,6 @@ if (!empty($idsRegioes)) {
     }
 }
 
-// Quais desses já foram marcados como concluídos hoje. Usa o registro mais
-// recente de cada exercício (MAX(id)) pra não se confundir com linhas
-// duplicadas antigas na atividade_usuario.
 $stmt = $conexao->prepare("
     SELECT au.id_exercicio
     FROM atividade_usuario au
@@ -98,7 +88,6 @@ $concluidosHoje = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'id
 $totalHoje      = count($exerciciosHoje);
 $totalConcluido = count(array_intersect(array_column($exerciciosHoje, 'id'), $concluidosHoje));
 
-// Progresso dos últimos 7 dias (quantos exercícios concluídos por dia)
 $dataInicioSemana = date('Y-m-d', strtotime('-6 days'));
 $stmt = $conexao->prepare("
     SELECT data_atividade, COUNT(*) AS total
@@ -126,8 +115,6 @@ for ($i = 6; $i >= 0; $i--) {
     ];
 }
 
-// Opções do check-in de bem-estar (tabela evolucao). "progresso" é um número
-// de 0 a 100 derivado automaticamente da carinha escolhida.
 $opcoesBemEstar = [
     'otimo'   => ['emoji' => '😄', 'label' => 'Ótimo',   'progresso' => 100],
     'bom'     => ['emoji' => '🙂', 'label' => 'Bom',      'progresso' => 75],
@@ -156,7 +143,7 @@ $bemEstarHojeLabel = $evolucaoHoje['bem_estar'] ?? null;
 <body>
     <div class="body-header">
     <header class="header">
-        <a href="inicio.php" class="vt">
+        <a href="#" class="vt">
             <img src="imagens/logoobranca.svg" class="logonav" alt="">
         </a>
 
@@ -230,12 +217,12 @@ $bemEstarHojeLabel = $evolucaoHoje['bem_estar'] ?? null;
             <a href="exercicio.php" class="atalho-card">
                 <span class="material-symbols-outlined">fitness_center</span>
                 <h3>Meus Exercícios</h3>
-                <p>Veja todos nossos exercícios.</p>
+                <p>Veja a lista completa e busque por nome.</p>
             </a>
             <a href="cronograma.php" class="atalho-card">
                 <span class="material-symbols-outlined">calendar_month</span>
                 <h3>Meu Cronograma</h3>
-                <p>Um cronograma montado para você.</p>
+                <p>Organize sua semana de reabilitação.</p>
             </a>
             <a href="perfil.php" class="atalho-card">
                 <span class="material-symbols-outlined">person</span>
@@ -249,35 +236,66 @@ $bemEstarHojeLabel = $evolucaoHoje['bem_estar'] ?? null;
             <section class="inicio-card">
                 <h2>Exercícios de hoje</h2>
 
+                <?php
+                    $pendentesHojeInicio = array_values(array_filter(
+                        $exerciciosHoje,
+                        fn($ex) => !in_array((int) $ex['id'], $concluidosHoje, true)
+                    ));
+                ?>
+
                 <?php if (empty($idsRegioes)): ?>
                     <p class="cronograma-sem-exercicio">
-                        Marque as regiões com dor no seu <a href="perfil.php">perfil</a> pra gente montar
+                        Marque as regiões com dor no seu perfil pra gente montar
                         os exercícios de hoje pra você.
                     </p>
-                <?php elseif (empty($exerciciosHoje)): ?>
+                <?php elseif ($totalHoje === 0): ?>
                     <p class="cronograma-sem-exercicio">Nenhum exercício cadastrado para hoje. Aproveite pra descansar!</p>
                 <?php else: ?>
-                    <?php foreach ($exerciciosHoje as $ex): ?>
-                        <?php $jaConcluido = in_array((int) $ex['id'], $concluidosHoje, true); ?>
-                        <div class="cronograma-exercicio-item" data-id-exercicio="<?= $ex['id'] ?>">
-                            <span class="material-symbols-outlined icon-exercicio-mini">fitness_center</span>
-                            <div class="cronograma-exercicio-info">
-                                <a href="exerciciodetalhe.php?id=<?= $ex['id'] ?>" class="cronograma-exercicio-nome">
-                                    <?= htmlspecialchars($ex['titulo']) ?>
-                                </a>
-                                <span class="cronograma-tag"><?= htmlspecialchars($ex['regiao_nome']) ?></span>
-                            </div>
-                            <div class="cronograma-exercicio-acoes">
-                                <button type="button"
-                                        class="btn-concluir<?= $jaConcluido ? ' concluido' : '' ?>"
-                                        title="Marcar como concluído hoje">
-                                    <span class="material-symbols-outlined">check_circle</span>
-                                </button>
-                            </div>
+                    <div class="progresso-hoje" data-concluido="<?= $totalConcluido ?>" data-total="<?= $totalHoje ?>">
+                        <div class="barra-progresso-wrap">
+                            <div class="barra-progresso-fill" style="width: <?= round($totalConcluido / $totalHoje * 100) ?>%"></div>
+                        </div>
+                        <p class="progresso-texto"><?= $totalConcluido ?> de <?= $totalHoje ?> concluídos hoje</p>
+                    </div>
+
+                    <div class="exercicios-lista-itens">
+                        <?php if (empty($pendentesHojeInicio)): ?>
+                            <p class="cronograma-sem-exercicio">Tudo feito por hoje!</p>
+                        <?php else: ?>
+                            <?php foreach ($pendentesHojeInicio as $ex): ?>
+                                <div class="cronograma-exercicio-item" data-id-exercicio="<?= $ex['id'] ?>">
+                                    <span class="material-symbols-outlined icon-exercicio-mini">fitness_center</span>
+                                    <div class="cronograma-exercicio-info">
+                                        <a href="exerciciodetalhe.php?id=<?= $ex['id'] ?>" class="cronograma-exercicio-nome">
+                                            <?= htmlspecialchars($ex['titulo']) ?>
+                                        </a>
+                                        <span class="cronograma-tag"><?= htmlspecialchars($ex['regiao_nome']) ?></span>
+                                    </div>
+                                    <div class="cronograma-exercicio-acoes">
+                                        <button type="button" class="btn-concluir" title="Marcar como concluído hoje">
+                                            <span class="material-symbols-outlined">check_circle</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+
+            <section class="inicio-card">
+                <h2>Sua semana</h2>
+                <div class="semana-dots">
+                    <?php foreach ($diasDaSemanaGrid as $dia): ?>
+                        <div class="dot-dia<?= $dia['ativo'] ? ' ativo' : '' ?><?= $dia['hoje'] ? ' hoje' : '' ?>">
+                            <span class="dot-bolinha"></span>
+                            <span class="dot-letra"><?= $dia['letra'] ?></span>
                         </div>
                     <?php endforeach; ?>
-                    <p class="inicio-hoje-resumo"><?= $totalConcluido ?> de <?= $totalHoje ?> concluídos hoje</p>
-                <?php endif; ?>
+                </div>
+                <p class="inicio-semana-resumo">
+                    <?= $totalSemana ?> exercício<?= $totalSemana === 1 ? '' : 's' ?> concluído<?= $totalSemana === 1 ? '' : 's' ?> nos últimos 7 dias
+                </p>
             </section>
 
             <section class="inicio-card" id="cardBemEstar">
@@ -301,7 +319,7 @@ $bemEstarHojeLabel = $evolucaoHoje['bem_estar'] ?? null;
     </main>
 </div>
 
-    <footer class="site-footer">
+<footer class="site-footer">
         <div class="footer-wrap">
             <div class="footer-top">
 
