@@ -197,33 +197,65 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Marca/desmarca exercício como concluído hoje (salva no banco via AJAX)
+    // Marca exercício como concluído hoje (salva no banco via AJAX).
+    // Ao concluir, o item some da lista e a barra de progresso atualiza.
     document.querySelectorAll('.btn-concluir').forEach(botao => {
         botao.addEventListener('click', (event) => {
             event.stopPropagation();
             const item = botao.closest('.cronograma-exercicio-item');
             const idExercicio = item.dataset.idExercicio;
-            const vaiConcluir = !botao.classList.contains('concluido');
 
             botao.disabled = true;
 
             fetch('marcar_exercicio.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `id_exercicio=${encodeURIComponent(idExercicio)}&concluido=${vaiConcluir ? 1 : 0}`
+                body: `id_exercicio=${encodeURIComponent(idExercicio)}&concluido=1`
             })
-                .then(resposta => resposta.json())
-                .then(dados => {
-                    if (dados.sucesso) {
-                        botao.classList.toggle('concluido', vaiConcluir);
-                    } else {
-                        console.error('Erro ao salvar:', dados.mensagem);
+                .then(resposta => resposta.json().then(dados => ({ status: resposta.status, dados })))
+                .then(({ status, dados }) => {
+                    if (status !== 200 || !dados.sucesso) {
+                        throw new Error(dados.mensagem || `Falha ao salvar (HTTP ${status})`);
                     }
+                    removerExercicioConcluido(item);
                 })
-                .catch(erro => console.error('Erro de conexão:', erro))
-                .finally(() => { botao.disabled = false; });
+                .catch(erro => {
+                    // Erro bem visível: se algo der errado (ex: arquivo antigo em
+                    // cache, sessão expirada), você vê isso no Console (F12).
+                    console.error('[Vitallis] Não foi possível marcar o exercício como concluído:', erro);
+                    botao.disabled = false;
+                });
         });
     });
+
+    function removerExercicioConcluido(item) {
+        const listaItens = item.closest('.exercicios-lista-itens');
+        const progresso = item.closest('.inicio-card, .cronograma-dia-lista')
+            ?.querySelector('.progresso-hoje');
+
+        item.classList.add('concluido-sumir');
+
+        setTimeout(() => {
+            item.remove();
+
+            if (progresso) {
+                const total = parseInt(progresso.dataset.total, 10);
+                const concluido = parseInt(progresso.dataset.concluido, 10) + 1;
+                progresso.dataset.concluido = concluido;
+
+                const percentual = total > 0 ? Math.round((concluido / total) * 100) : 0;
+                const barra = progresso.querySelector('.barra-progresso-fill');
+                if (barra) barra.style.width = percentual + '%';
+
+                const texto = progresso.querySelector('.progresso-texto');
+                if (texto) texto.textContent = `${concluido} de ${total} concluídos hoje`;
+            }
+
+            if (listaItens && listaItens.children.length === 0) {
+                listaItens.innerHTML = '<p class="cronograma-sem-exercicio">Tudo feito por hoje!</p>';
+            }
+        }, 250);
+    }
 });
 
 // ===================================================
