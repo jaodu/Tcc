@@ -7,9 +7,11 @@ if (session_status() === PHP_SESSION_NONE) {
 $host = 'localhost';
 $db   = 'bd_vitallis';
 $user = 'root';
-$pass = ''; 
+$pass = '';
 
-// Oculta avisos nativos do PHP para lidarmos com o erro manualmente
+// Mínimo de caracteres na senha
+define('SENHA_TAMANHO_MINIMO', 8);
+
 mysqli_report(MYSQLI_REPORT_OFF);
 
 // Cria a conexão com o MySQL
