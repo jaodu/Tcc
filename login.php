@@ -4,11 +4,11 @@ require_once 'conexao.php';
 $mensagem_erro = "";
 $mensagem_sucesso = "";
 
-// Verifica se o formulário foi enviado via POST
+//formulario foi enviado via post
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
 
-    // --- LÓGICA DE LOGIN ---
+    //LOGIN
     if ($acao === 'login') {
         $email = trim($_POST['email_login']);
         $senha = trim($_POST['senha_login']);
@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['usuario_id'] = $usuario['id'];
                     $_SESSION['usuario_email'] = $usuario['email'];
                     
-                    // Redireciona para a página inicio.php
                     header("Location: inicio.php"); 
                     exit;
                 } else {
@@ -39,14 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // --- LÓGICA DE CADASTRO ---
+    //CADASTRO 
     if ($acao === 'cadastro') {
         $email = trim($_POST['email_cad']);
         $senha = trim($_POST['senha_cad']);
         $confirma_senha = trim($_POST['confirma_senha_cad']);
 
         if (!empty($email) && !empty($senha) && !empty($confirma_senha)) {
-            if ($senha !== $confirma_senha) {
+            if (strlen($senha) < SENHA_TAMANHO_MINIMO) {
+                $mensagem_erro = "A senha deve ter no mínimo " . SENHA_TAMANHO_MINIMO . " caracteres.";
+            } elseif ($senha !== $confirma_senha) {
                 $mensagem_erro = "As senhas não coincidem!";
             } else {
                 $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
@@ -97,8 +98,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container-geral">
         <div class="formContainer">
+            <a href="index.php" class="btn-voltar-index" title="Voltar ao início">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                <span>Início</span>
+            </a>
 
-            <!-- FORMULÁRIO DE LOGIN -->
+            <!--LOGIN -->
             <div id="loginContainer" class="loginContainer">
                 <form method="post">
                     <input type="hidden" name="acao" value="login">
@@ -113,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="fas fa-lock"></i>
                         <input type="password" name="senha_login" placeholder="Senha" required>
                     </div>
-                    <a href="#" class="esqueceu">Esqueceu sua senha?</a>
                     <hr>
                     <button class="loginButton" type="submit">Entrar</button>
                     <p class="semcadastro">
@@ -123,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </div>
 
-            <!-- FORMULÁRIO DE CADASTRO -->
+            <!--CADASTRO -->
             <div id="signContainer" class="signContainer">
                 <form method="post">
                     <input type="hidden" name="acao" value="cadastro">
@@ -136,11 +140,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" name="senha_cad" placeholder="Senha" required>
+                        <input type="password" name="senha_cad" placeholder="Senha" autocomplete="new-password" required>
                     </div>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" name="confirma_senha_cad" placeholder="Confirme sua senha" required>
+                        <input type="password" name="confirma_senha_cad" placeholder="Confirme sua senha" autocomplete="new-password" required>
                     </div>
                     <hr>
                     <button class="signButton" type="submit">Cadastre-se</button>
@@ -162,11 +166,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <!-- Scripts JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/script.js"></script>
-
-    <!-- Disparo dos Popups do SweetAlert2 via PHP -->
     <script>
         <?php if (!empty($mensagem_sucesso)): ?>
             Swal.fire({
@@ -186,6 +188,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         <?php endif; ?>
     </script>
+
+
 </body>
 
 </html>
