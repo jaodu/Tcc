@@ -19,21 +19,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dores  = array_filter(array_map('intval', explode(',', $_POST['dores'] ?? '')));
 
     if ($nome === '') {
-        $mensagem_erro = "Nome e e-mail são obrigatórios.";
+        $mensagem_erro = "O nome é obrigatório.";
     } else {
         $dataNascimento = (date('Y') - $idade) . '-01-01';
 
         $conexao->begin_transaction();
         try {
+            // O e-mail não é editável aqui, então só mexemos na senha (se foi preenchida).
+            // Como o mysqli não lança exceção neste projeto (MYSQLI_REPORT_OFF),
+            // checamos o retorno de cada execute() e lançamos o erro nós mesmos.
             if ($senha !== '') {
                 $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-                $stmt = $conexao->prepare("UPDATE usuario SET email = ?, senha = ? WHERE id = ?");
-                $stmt->bind_param("ssi", $email, $senhaHash, $idUsuario);
-            } else {
-                $stmt = $conexao->prepare("UPDATE usuario SET email = ? WHERE id = ?");
-                $stmt->bind_param("si", $email, $idUsuario);
+                $stmt = $conexao->prepare("UPDATE usuario SET senha = ? WHERE id = ?");
+                $stmt->bind_param("si", $senhaHash, $idUsuario);
+                if (!$stmt->execute()) {
+                    throw new Exception("Erro ao atualizar senha: " . $stmt->error);
+                }
             }
-            $stmt->execute();
 
             $stmt = $conexao->prepare("
                 INSERT INTO perfil (nome, data_nascimento, peso, altura, id_usuario)
@@ -42,11 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     peso = VALUES(peso), altura = VALUES(altura)
             ");
             $stmt->bind_param("ssddi", $nome, $dataNascimento, $peso, $altura, $idUsuario);
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception("Erro ao salvar perfil: " . $stmt->error);
+            }
 
             $stmt = $conexao->prepare("UPDATE registro_dor SET ativa = 0 WHERE id_usuario = ?");
             $stmt->bind_param("i", $idUsuario);
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception("Erro ao atualizar dores: " . $stmt->error);
+            }
 
             $stmt = $conexao->prepare("
                 INSERT INTO registro_dor (data_registro, ativa, id_usuario, id_regiao_corpo)
@@ -55,13 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ");
             foreach ($dores as $idRegiao) {
                 $stmt->bind_param("ii", $idUsuario, $idRegiao);
-                $stmt->execute();
+                if (!$stmt->execute()) {
+                    throw new Exception("Erro ao salvar dor: " . $stmt->error);
+                }
             }
 
             $conexao->commit();
             $mensagem_sucesso = "Informações salvas com sucesso!";
         } catch (Exception $e) {
             $conexao->rollback();
+            error_log("[Vitallis perfil] " . $e->getMessage());
             $mensagem_erro = "Erro ao salvar. Tente novamente.";
         }
     }
@@ -114,69 +123,46 @@ body {
 </head>
 <body>
     <div class="body-header">
-    <header class="header">
-        <a href="inicio.php" class="vt">
-            <img src="imagens/logoobranca.svg" class="logonav" alt="">
-        </a>
-
-        <nav>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="inicio.php" class="nav-link">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">
-                            home
-                            </span>
-                        </div>
-                        <span class="label">Início</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="exercicio.php" class="nav-link">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">
-                            exercise
-                            </span>
-                        </div>
-                        <span class="label">Exercícios</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="cronograma.php" class="nav-link">
-                        <div class="icon">
-                            <span class="material-symbols-outlined">
-                            calendar_month
-                            </span>
-                        </div>
-                        <span class="label">Cronograma</span>
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown-item" id="perfilItem">
-                
-                    <a href="#" class="nav-link" id="perfilToggle">
-                        <span class="material-symbols-outlined">
-                            account_circle
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu" id="perfilDropdown">
-                        <li>
-                            <a href="perfil.php" class="dropdown-link">
-                                <span class="material-symbols-outlined">person</span>
-                                <span>Ver perfil</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="logout.php" class="dropdown-link" id="logoutBtn">
-                                <span class="material-symbols-outlined">logout</span>
-                                <span>Sair</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
+        <header class="header">
+            <a href="index.php" class="vt">
+                <img src="imagens/logoobranca.svg" class="logonav" alt="">
+            </a>
+            <nav>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="inicio.php" class="nav-link">
+                            <div class="icon"><span class="material-symbols-outlined">home</span></div>
+                            <span class="label">Início</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="exercicio.php" class="nav-link">
+                            <div class="icon"><span class="material-symbols-outlined">exercise</span></div>
+                            <span class="label">Exercícios</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="cronograma.php" class="nav-link">
+                            <div class="icon"><span class="material-symbols-outlined">calendar_month</span></div>
+                            <span class="label">Cronograma</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown-item" id="perfilItem">
+                        <a href="#" class="nav-link" id="perfilToggle">
+                            <span class="material-symbols-outlined">account_circle</span>
+                        </a>
+                        <ul class="dropdown-menu" id="perfilDropdown">
+                            <li><a href="perfil.php" class="dropdown-link">
+                                <span class="material-symbols-outlined">person</span><span>Ver perfil</span>
+                            </a></li>
+                            <li><a href="logout.php" class="dropdown-link" id="logoutBtn">
+                                <span class="material-symbols-outlined">logout</span><span>Sair</span>
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
     </div>
 
     <main class="perfil-main">
@@ -264,41 +250,46 @@ body {
         <?php endif; ?>
     </script>
 
-   <footer class="site-footer">
+    <footer class="site-footer">
         <div class="footer-wrap">
             <div class="footer-top">
-
                 <div class="footer-col">
+                    <div class="footer-brand">
+                        <span class="dot"></span>
+                        <span>Vitallis</span>
+                    </div>
                     <p class="lede">
                         Plataforma digital de apoio à reabilitação e fisioterapia,
                         feita para quem não tem tempo ou condições de manter
                         acompanhamento profissional frequente.
                     </p>
                 </div>
-
                 <div class="footer-col">
                     <h4>Navegação</h4>
                     <ul class="footer-links">
-                        <li><a href="inicio.php"><span class="material-symbols-outlined">home</span>Início</a></li>
+                        <li><a href="index.php"><span class="material-symbols-outlined">home</span>Início</a></li>
                         <li><a href="exercicio.php"><span class="material-symbols-outlined">health_and_safety</span>Exercícios</a></li>
                         <li><a href="cronograma.php"><span class="material-symbols-outlined">calendar_month</span>Cronograma</a></li>
                     </ul>
                 </div>
-
+                <div class="footer-col">
+                    <h4>Institucional</h4>
+                    <ul class="footer-links">
+                        <li><a href="sobre.php"><span class="material-symbols-outlined">info</span>Sobre nós</a></li>
+                    </ul>
+                </div>
                 <div class="footer-col">
                     <h4>Contato</h4>
                     <ul class="footer-links">
-                        <li><a href="mailto:yumisperes@gmail.com" ><span class="material-symbols-outlined">mail</span>yumisperes@gmail.com</a></li>
-                        <li><a href="tel:+5516997423129"><span class="material-symbols-outlined">call</span>(16) 99742-3120</a></li>
+                        <li><a href="mailto:contato@vitallis.com"><span class="material-symbols-outlined">mail</span>contato@vitallis.com</a></li>
+                        <li><a href="tel:+5516999999999"><span class="material-symbols-outlined">call</span>(16) 99999-9999</a></li>
                     </ul>
                     <div class="social-row">
-                        <a href="https://www.instagram.com/aliceespinelli_/" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://wa.me/5516997016732" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" aria-label="Instagram" class="icon-footer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp" class="icon-footer"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
-
             </div>
-
             <div class="footer-bottom">
                 <span>© 2026 Vitallis — Projeto de Trabalho de Conclusão de Curso</span>
                 <span>Desenvolvido por Alice, João e Yumi</span>
